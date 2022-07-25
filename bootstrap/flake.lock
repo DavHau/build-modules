@@ -1,0 +1,43 @@
+{
+  "nodes": {
+    "micropython-lib-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1658689375,
+        "narHash": "sha256-d+W/4pZInIQ3htnBardZGCBpTh0N4SHc5P8kCmbGrOs=",
+        "owner": "davhau",
+        "repo": "micropython-lib",
+        "rev": "7760bd0fdb04da64cc58ebe8725ae25fc67b800c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "micropython",
+        "repo": "micropython-lib",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1658557357,
+        "narHash": "sha256-0gqNef6skYQKJSS2vLojxrXOrc72zoX5VTDKUqEo6Gk=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "42ca9bef09e780eabe84328dd1b730cef978f098",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "micropython-lib-src": "micropython-lib-src",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
