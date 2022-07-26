@@ -3,11 +3,11 @@
     "micropython-lib-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1658689375,
-        "narHash": "sha256-d+W/4pZInIQ3htnBardZGCBpTh0N4SHc5P8kCmbGrOs=",
+        "lastModified": 1658850564,
+        "narHash": "sha256-lnYT2GzQRgTxIhxbAKGGUmmEHEz7sJRki3OgNaJIoQY=",
         "owner": "davhau",
         "repo": "micropython-lib",
-        "rev": "7760bd0fdb04da64cc58ebe8725ae25fc67b800c",
+        "rev": "b1c84bbcd9d61c793e509bfa838be81fa568fb81",
         "type": "github"
       },
       "original": {

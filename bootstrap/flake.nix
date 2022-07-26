@@ -22,14 +22,60 @@
     packages = forAllSystems (system: pkgs: rec {
 
       bootstrap = pkgs.writeScriptBin "boostrap" ''
-        cp -r ${bootstrap-binaries} ./bootstrap-binaries
-        chmod +w -R ./bootstrap-binaries
+        rm -rf ./bbin
+        cp -r ${bbin} ./bbin
+        chmod +w -R ./bbin
+        git add -f ./bbin
+      '';
+
+      bbin = pkgs.runCommand "bbin" {} ''
+        mkdir $out
+        cp ${micropython-standalone}/bin/* $out/
+        cp -r ${micropython-stdlib}/lib $out/mpy-lib
+        cp ${pkgs.pcre.out}/lib/libpcre.so $out/libpcre.so
       '';
 
       micropython-stdlib = import ./micropython-stdlib.nix {
         inherit micropython-lib-src;
         inherit (pkgs) runCommand;
       };
+
+      micropython-musl = pkgs.pkgsMusl.micropython.overrideAttrs (old: {
+        doCheck = false;
+        NIX_CFLAGS_COMPILE = [
+          "-w"
+          "-Wno-error"
+        ];
+      });
+
+      micropython = pkgs.micropython.overrideAttrs (old: {
+        doCheck = false;
+      });
+
+      micropython-musl-standalone = pkgs.runCommand "micropython-standalone" {} ''
+        mkdir -p $out/bin
+        cp ${micropython-musl}/bin/micropython $out/bin/micropython
+        chmod +w $out/bin/*
+        patchelf $out/bin/micropython --no-default-lib
+        patchelf $out/bin/micropython --set-rpath '$ORIGIN'
+        cp -r ${pkgs.musl}/lib/libc.so $out/bin/
+        cp -r ${pkgs.musl}/lib/ld-musl* $out/bin/ld-linux
+        cp -r ${pkgs.libffi}/lib/libffi.so.* $out/bin/
+      '';
+
+      micropython-standalone = pkgs.runCommand "micropython-standalone" {} ''
+        mkdir -p $out/bin
+        cp ${micropython}/bin/micropython $out/bin/micropython
+        chmod +w $out/bin/*
+        patchelf $out/bin/micropython --no-default-lib
+        patchelf $out/bin/micropython --set-rpath '$ORIGIN'
+        cp -r ${pkgs.glibc}/lib/ld-linux-x86-64.so.2 $out/bin/ld-linux
+        cp -r ${pkgs.glibc}/lib/libpthread.so.0 $out/bin/
+        cp -r ${pkgs.glibc}/lib/libdl.so.2 $out/bin/
+        cp -r ${pkgs.glibc}/lib/libm.so.6 $out/bin/
+        cp -r ${pkgs.glibc}/lib/libc.so.6 $out/bin/
+        cp -r ${pkgs.libffi}/lib/libffi.so.* $out/bin/
+      '';
 
       micropython-static = pkgs.pkgsStatic.micropython.overrideAttrs (old: {
         checkPhase = ":";
@@ -40,6 +86,7 @@
         nativeBuildInputs = old.nativeBuildInputs ++ (with pkgs; [
           bintools
         ]);
+        DEBUG=true;
         preBuild = ''
           mkdir $TMP/bin
           ln -s $NIX_CC/bin/*gcc $TMP/bin/gcc
@@ -49,25 +96,7 @@
         '';
       });
 
-      bootstrap-binaries = pkgs.runCommand "bootstrap-binaries" {} ''
-        mkdir $out
-        cp ${micropython-static}/bin/micropython $out/micropython
-        cp -r ${micropython-stdlib}/lib $out/mp-lib
-      '';
-
-      # micropython-with-stdlib = pkgs.micropython.overrideAttrs (old: {
-      #   doCheck = false;
-      #   postInstall = ''
-      #     mkdir -p $out/lib
-      #     cp -r ${micropython-stdlib}/lib/* $out/lib/
-      #   '';
-      #   postPatch = ''
-      #     substituteInPlace ports/unix/main.c --replace \
-      #       "path = MICROPY_PY_SYS_PATH_DEFAULT;" \
-      #       "path = \"$MICROPY_PY_SYS_PATH_DEFAULT\";"
-      #   '';
-      #   MICROPY_PY_SYS_PATH_DEFAULT = ".frozen:${micropython-stdlib}/lib";
-      # });
+      musl-static = pkgs.pkgsStatic.musl;
     });
   };
 }
