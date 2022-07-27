@@ -11,9 +11,12 @@
     ++ [
       (
         derivation (
-          currStep.env
+          currStep.interpreter.env
           // {
-            inherit (currStep) args builder name outputs system;
+            inherit (currStep) name outputs;
+            inherit (currStep.interpreter) builder system;
+            args = currStep.interpreter.args ++ [currStep.script];
+            data = l.toFile "${currStep.name}-data.json" (l.toJSON currStep.data);
           }
           // (l.optionalAttrs (prevStep != null) {
             outPrev = prevStep;
@@ -34,11 +37,15 @@
     l.last connectedSteps;
 
 in {
+
+  imports = [
+    ./interpreters/default.nix
+    ./interpreters/micropython.nix
+  ];
+
   options = {
     steps = l.mkOption {
-      type = t.attrsOf (t.submoduleWith {
-        modules = [./derivation-interface.nix];
-      });
+      type = t.attrsOf (t.submodule [./interfaces/step.nix]);
     };
     result = l.mkOption {
       type = t.anything;

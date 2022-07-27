@@ -13,9 +13,6 @@ in {
       type = t.attrsOf (t.oneOf [t.str t.path t.package]);
       default = {};
     };
-    name = lib.mkOption {
-      type = t.str;
-    };
     outputs = lib.mkOption {
       type = t.listOf t.str;
       default = ["out"];
