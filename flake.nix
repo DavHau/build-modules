@@ -2,10 +2,12 @@
   description = "module system based nix builders";
 
   inputs = {
+    micropython-bin = {flake = false; url = "github:davhau/nix-bootstrap-binaries/micropython";};
     nixpkgs-raw = {flake = false; url = "nixpkgs/nixos-unstable";};
   };
 
   outputs = {
+    micropython-bin,
     nixpkgs-raw,
     self,
   } @ inp: let
@@ -16,8 +18,18 @@
     forAllSystems = f: l.genAttrs supportedSystems
       (system: f system);
 
+    bootstrapped = {
+      micropython = "${micropython-bin}/bin";
+    };
+
     testBuild' = system: l.evalModules {
-      specialArgs = {inherit l; t = l.types;};
+      specialArgs = {
+        inherit
+          bootstrapped
+          l
+          ;
+        t = l.types;
+      };
       modules = [
         ./modules/build.nix
         ./examples/package.nix

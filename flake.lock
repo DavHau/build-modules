@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "micropython-bin": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1658926728,
+        "narHash": "sha256-ScRvX16+pU0wGHHd54dupFvCs1U6dwIeetPBulpRqVU=",
+        "owner": "davhau",
+        "repo": "nix-bootstrap-binaries",
+        "rev": "58e59ddd08cb6e3f609541d64efd0dd28cbb34d2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "davhau",
+        "ref": "micropython",
+        "repo": "nix-bootstrap-binaries",
+        "type": "github"
+      }
+    },
     "nixpkgs-raw": {
       "flake": false,
       "locked": {
@@ -18,6 +35,7 @@
     },
     "root": {
       "inputs": {
+        "micropython-bin": "micropython-bin",
         "nixpkgs-raw": "nixpkgs-raw"
       }
     }
