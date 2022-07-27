@@ -1,40 +1,40 @@
 {l, t, config, ...}: let
 
   /*
-   This ensures that all steps of a given list are connected so that the `out`
-   of each step is fed as an input named `outPrev` to the next step in the list.
+   This ensures that all phases of a given list are connected so that the `out`
+   of each phase is fed as an input named `outPrev` to the next phase in the list.
   */
-  connectSteps = all: currStep: let
-    prevStep = if all == [] then null else l.last all;
+  connectphases = all: currphase: let
+    prevphase = if all == [] then null else l.last all;
   in
     all
     ++ [
       (
         derivation (
-          currStep.interpreter.env
+          currphase.interpreter.env
           // {
-            inherit (currStep) name outputs;
-            inherit (currStep.interpreter) builder system;
-            args = currStep.interpreter.args ++ [currStep.script];
-            data = l.toFile "${currStep.name}-data.json" (l.toJSON currStep.data);
+            inherit (currphase) name outputs;
+            inherit (currphase.interpreter) builder system;
+            args = currphase.interpreter.args ++ [currphase.script];
+            data = l.toFile "${currphase.name}-data.json" (l.toJSON currphase.data);
           }
-          // (l.optionalAttrs (prevStep != null) {
-            outPrev = prevStep;
+          // (l.optionalAttrs (prevphase != null) {
+            outPrev = prevphase;
           })
         )
       )
     ];
 
-  # renders a list of loose steps into a single derivation
-  renderStepsToSingleDerivation = steps: let
-    namedSteps = l.mapAttrs (name: step: step // {inherit name;}) steps;
-    stepsList = l.attrValues namedSteps;
-    connectedSteps = l.foldl
-      connectSteps
+  # renders a list of loose phases into a single derivation
+  renderphasesToSingleDerivation = phases: let
+    namedphases = l.mapAttrs (name: phase: phase // {inherit name;}) phases;
+    phasesList = l.attrValues namedphases;
+    connectedphases = l.foldl
+      connectphases
       []
-      stepsList;
+      phasesList;
   in
-    l.last connectedSteps;
+    l.last connectedphases;
 
 in {
 
@@ -44,8 +44,8 @@ in {
   ];
 
   options = {
-    steps = l.mkOption {
-      type = t.attrsOf (t.submodule [./interfaces/step.nix]);
+    phases = l.mkOption {
+      type = t.attrsOf (t.submodule [./interfaces/phase.nix]);
     };
     result = l.mkOption {
       type = t.anything;
@@ -53,6 +53,6 @@ in {
   };
 
   config = {
-    result = renderStepsToSingleDerivation config.steps;
+    result = renderphasesToSingleDerivation config.phases;
   };
 }

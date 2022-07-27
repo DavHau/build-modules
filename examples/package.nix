@@ -1,15 +1,15 @@
 {config, ...}:{
-  steps = {
-    step1 = {
+  phases = {
+    phase1 = {
       interpreter = config.interpreters.micropython;
-      script = ./step1.py;
+      script = ./phase1.py;
       data = {
         foo = "bar";
       };
     };
-    step2 = {
+    phase2 = {
       interpreter = config.interpreters.micropython;
-      script = ./step2.py;
+      script = ./phase2.py;
       data = {
         bar = "baz";
       };
