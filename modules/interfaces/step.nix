@@ -14,7 +14,7 @@ in {
       type = t.path;
     };
     interpreter = lib.mkOption {
-      type = t.anything;
+      type = t.submodule ./interpreter.nix;
     };
   };
 }
