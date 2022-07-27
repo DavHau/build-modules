@@ -1,5 +1,4 @@
 import os
 
 out = os.getenv('out')
-print(out)
-print("test", file=open(out, 'w'))
+print("step1 output", file=open(out, 'w'))

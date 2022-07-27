@@ -3,12 +3,11 @@ import json
 
 out = os.getenv('out')
 outPrev = os.getenv('outPrev')
-print(f"outPrev: {outPrev}")
-print(f"outPrev content: {open(outPrev).read()}")
 
-info = dict(
-  foo="bar",
-  abc="123",
-)
-with open(out, 'w') as fOut:
-  json.dump(info, fOut)
+step1_output = open(outPrev).read()
+result = f"""
+  {step1_output}
+  step2 output
+"""
+
+print(result, file=open(out, 'w'))
