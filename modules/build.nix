@@ -26,7 +26,7 @@
     ];
 
   # renders a list of loose phases into a single derivation
-  renderphasesToSingleDerivation = phases: let
+  renderPhasesToDerivations = phases: let
     namedphases = l.mapAttrs (name: phase: phase // {inherit name;}) phases;
     phasesList = l.attrValues namedphases;
     connectedphases = l.foldl
@@ -36,11 +36,16 @@
   in
     l.last connectedphases;
 
+  # renderPhasesToSingleDerivation = phases: let
+  #   namedphases = l.mapAttrs (name: phase: phase // {inherit name;}) phases;
+  #   phasesList = l.attrValues namedphases;
+  # in
+
 in {
 
   imports = [
     ./interpreters/default.nix
-    ./interpreters/micropython.nix
+    ./interpreters/micropython
   ];
 
   options = {
@@ -53,6 +58,6 @@ in {
   };
 
   config = {
-    result = renderphasesToSingleDerivation config.phases;
+    result = renderPhasesToDerivations config.phases;
   };
 }

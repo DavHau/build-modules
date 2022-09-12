@@ -6,5 +6,6 @@ in {
     builder = "${bootstrapped.micropython}/ld-linux";
     env.MICROPYPATH = "${bootstrapped.micropython}/mpy-lib";
     args = ["${bootstrapped.micropython}/micropython"];
+    phaseRunnerScript = ./runner.py;
   };
 }
