@@ -40,6 +40,7 @@
     };
 
   in {
-    testBuild = (testBuild' "x86_64-linux").config.result;
+    testBuildSplit = (testBuild' "x86_64-linux").config.split;
+    testBuildSingle = (testBuild' "x86_64-linux").config.single;
   };
 }
