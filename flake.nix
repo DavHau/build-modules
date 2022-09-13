@@ -2,12 +2,14 @@
   description = "module system based nix builders";
 
   inputs = {
-    micropython-bin = {flake = false; url = "github:davhau/nix-bootstrap-binaries/micropython";};
+    bin-micropython = {flake = false; url = "github:davhau/nix-bootstrap-binaries/micropython";};
+    bin-python = {flake = false; url = "github:davhau/nix-bootstrap-binaries/python";};
     nixpkgs-raw = {flake = false; url = "nixpkgs/nixos-unstable";};
   };
 
   outputs = {
-    micropython-bin,
+    bin-micropython,
+    bin-python,
     nixpkgs-raw,
     self,
   } @ inp: let
@@ -19,7 +21,8 @@
       (system: f system);
 
     bootstrapped = {
-      micropython = "${micropython-bin}/bin";
+      micropython = "${bin-micropython}/bin";
+      python = "${bin-python}/bin";
     };
 
     testBuild' = system: l.evalModules {

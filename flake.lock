@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "micropython-bin": {
+    "bin-micropython": {
       "flake": false,
       "locked": {
         "lastModified": 1658926728,
@@ -13,6 +13,23 @@
       "original": {
         "owner": "davhau",
         "ref": "micropython",
+        "repo": "nix-bootstrap-binaries",
+        "type": "github"
+      }
+    },
+    "bin-python": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1660552466,
+        "narHash": "sha256-v/fYaGXnBSV+d+7xQFEtbaKiV2rTj/iF8ySgtgTB2zk=",
+        "owner": "davhau",
+        "repo": "nix-bootstrap-binaries",
+        "rev": "6727b653cd28545aa0cd142981ddd71aea4f7f57",
+        "type": "github"
+      },
+      "original": {
+        "owner": "davhau",
+        "ref": "python",
         "repo": "nix-bootstrap-binaries",
         "type": "github"
       }
@@ -35,7 +52,8 @@
     },
     "root": {
       "inputs": {
-        "micropython-bin": "micropython-bin",
+        "bin-micropython": "bin-micropython",
+        "bin-python": "bin-python",
         "nixpkgs-raw": "nixpkgs-raw"
       }
     }

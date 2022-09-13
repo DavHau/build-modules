@@ -16,5 +16,14 @@ in {
     system = lib.mkOption {
       type = t.str;
     };
+    runnerScript = lib.mkOption {
+      type = t.path;
+    };
+    phaseInitScript = lib.mkOption {
+      type = t.path;
+    };
+    phaseExitScript = lib.mkOption {
+      type = t.path;
+    };
   };
 }
